@@ -34,7 +34,11 @@ class Play extends Phaser.Scene{
 
         //add gumballs
         const gumSpawn1 = map.findObject('Spawns', obj => obj.name === 'GumSpawn1');
-        this.testGum1 = this.add.image(this, gumSpawn1.x, gumSpawn1.y, '');
+        const testGum1 = new Gumball(this, gumSpawn1.x, gumSpawn1.y, 'player', 0);
+
+        this.cameras.main.setBounds(0, 0, map.widthInPixels, map.heightInPixels)
+        this.cameras.main.startFollow(this.player, true, 0.25, 0.25)
+        this.physics.world.setBounds(0, 0, map.widthInPixels, map.heightInPixels)
 
         //tilemap colliders
         groundLayer.setCollisionByProperty({
@@ -54,5 +58,12 @@ class Play extends Phaser.Scene{
 
     update(){
         this.FSM.step();
+
+        
+        if(this.player.body.onFloor()){
+            this.player.touchedBounds = true;
+        }
+        
+        
     }
 }

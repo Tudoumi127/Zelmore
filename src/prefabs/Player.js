@@ -7,10 +7,10 @@ class Player extends Phaser.Physics.Arcade.Sprite{
 
         this.body.setSize(this.width / 2, this.height / 2)
         this.body.setCollideWorldBounds(true);
-        this.body.setGravity(200);
+        this.body.setGravityY(200);
 
         this.direction = direction;
-        this.playerVelocity = 10;
+        this.playerVelocity = 500;
         this.touchedBounds = false;
 
 
@@ -23,16 +23,18 @@ class Player extends Phaser.Physics.Arcade.Sprite{
         }, [scene, this])
     }
 
-    update(){
-        if(scene.onFloor){
+    /*update(){
+        if(this.body.onFloor()){
             this.touchedBounds = true;
+            console.log(this.touchedBounds);
         }
-    }
+        console.log(this.body.onFloor());
+    }*/
 }
 
 class IdleState extends State {
     enter(scene, player) {
-        player.setVelocityX(0)
+        player.setVelocity(0);
         //player.anims.play(`idle-${player.direction}`)
         player.anims.stop()
     }
@@ -42,7 +44,7 @@ class IdleState extends State {
         const { left, right, space, shift } = scene.keys
         const HKey = scene.keys.HKey
 
-        // transition to swing if pressing space
+        // transition to jump if pressing space
         if(Phaser.Input.Keyboard.JustDown(space)) {
             this.stateMachine.transition('jump')
             return
@@ -87,13 +89,14 @@ class MoveState extends State {
         }
 
         // hurt if H key input (just for demo purposes)
-        if(Phaser.Input.Keyboard.JustDown(HKey)) {
+        /*if(Phaser.Input.Keyboard.JustDown(HKey)) {
             this.stateMachine.transition('hurt')
             return
-        }
+        }*/
 
         // transition to idle if not pressing movement keys
         if(!(left.isDown || right.isDown)) {
+            console.log("i wanna move")
             this.stateMachine.transition('idle')
             return
         }
@@ -109,20 +112,22 @@ class MoveState extends State {
         }
         // normalize movement vector, update player position, and play proper animation
         moveDirection.normalize()
-        player.setVelocity(player.playerVelocity * moveDirection.x, player.playerVelocity * moveDirection.y)
+        player.setVelocityX(player.playerVelocity * moveDirection.x)
         //player.anims.play(`walk-${player.direction}`, true)
     }
 }
 
 class JumpState extends State {
     enter(scene, player) {
-        player.setVelocityY(player.velocity)
+        console.log(player.playerVelocity);
+        player.setVelocityY(player.playerVelocity)
         //player.anims.play(`jump-${player.direction}`)
         /*player.once('animationcomplete', () => {
             this.stateMachine.transition('idle')
         })*/
     }
     execute(scene, player){
+        console.log("jump state execute")
         const {space} = scene.keys;
 
         if(scene.hurt) {
@@ -134,6 +139,7 @@ class JumpState extends State {
         if(colliding.down){
             this.stateMachine.transition('idle');
         }
+
     }
 }
 
