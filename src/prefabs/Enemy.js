@@ -1,19 +1,23 @@
 class Enemy extends Phaser.Physics.Arcade.Sprite{
+
+    //unused prefab class for attack projectiles- left here for the future if I wish to revisit
     constructor(scene, x, y, texture, frame, direction){
         super(scene, x, y, texture, frame);
 
         scene.add.existing(this);
         scene.physics.add.existing(this, false);
 
+        //physics
         this.body.setSize(this.width / 2, this.height / 2)
         this.body.setCollideWorldBounds(true);
         this.body.setGravityY(200);
 
+        //variables
         this.direction = direction;
         this.enemyVelocity = 200;
         this.moveTime = 0;
 
-
+        //statemachine
         scene.FSM = new StateMachine('idle', {
             idle: new EnemyIdleState(),
             left: new LeftState(),
@@ -26,7 +30,6 @@ class Enemy extends Phaser.Physics.Arcade.Sprite{
 class EnemyIdleState extends State {
     enter(scene, enemy) {
         player.setVelocity(0);
-        //player.anims.play(`idle-${player.direction}`)
         player.anims.stop()
     }
 
@@ -49,7 +52,6 @@ class EnemyIdleState extends State {
 
 class LeftState extends State {
     enter(scene, enemy) {
-        //console.log(player.playerVelocity);
         enemy.setVelocityX(-(enemy.enemyVelocity))
     }
     execute(scene, player){
@@ -60,7 +62,6 @@ class LeftState extends State {
 
 class RightState extends State {
     enter(scene, enemy) {
-        //console.log(player.playerVelocity);
         enemy.setVelocityX(enemy.enemyVelocity)
     }
     execute(scene, player){

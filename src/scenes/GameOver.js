@@ -4,7 +4,9 @@ class GameOver extends Phaser.Scene {
     }
 
     create(){
+        //bind keys
         keyR = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.R);
+        //gameover screen image
         this.add.image(0, 0, 'deadZelmore').setOrigin(0,0);
     }
 

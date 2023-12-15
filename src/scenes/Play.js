@@ -35,6 +35,8 @@ class Play extends Phaser.Scene{
             fixedWidth: 0
         }
 
+        //tween that only shows up when game is played through canvas
+        //but my build is on WebGL so rip
         let getEm = this.add.bitmapText(this.width/2, this.height/2 - borderPadding/2, 'fonty', 'Collect All The Gumballs!', 55, 1).setOrigin(-0.1,-7).setAlpha(1);
         getEm.setDepth(12);
         this.tweens.add({
@@ -159,47 +161,15 @@ class Play extends Phaser.Scene{
             loop: true
         })
 
-        //messing around with enemies
-        /*let graphics = this.add.graphics()
-        graphics.lineStyle(2, 0xFFFFF, 0.75)
-
-        this.enemyPath = this.add.path(900, 334)
-        this.enemyPath.lineTo(1200, 334)
-        this.enemyPath.lineTo(900, 334)
-        this.enemyPath.draw(graphics)
-        let e = this.enemyPath.getStartPoint()
-
-        this.enemy = this.add.follower(this.enemyPath, e.x, e.y, 'car').setScale(0.5)
-        this.enemy.startFollow({
-            from: 0,
-            to: 1,
-            delay: 0,
-            duration: 10000,
-            ease: 'Power0',
-            hold: 0,
-            repeat: -1,
-            yoyo: false,
-            rotateToPath: false
-        })*/
-
-
     }
 
     update(){
         this.FSM.step();
 
-        /*if(this.player.attacking){
-            //play audio
-            //play visual effect animation
-            const attack = new Attack(this, this.player.x, this.player.y, 'gummies', 0, this.player, this.player.direction, this.enemy);
-            this.player.attacking = false;
-        }*/
-
         if(this.score >= 7){
             this.scene.start('youWinScene');
         }
         if(this.gameOver == true){
-            //this.score = 0;
             this.scene.start('gameOverScene');
         }
         

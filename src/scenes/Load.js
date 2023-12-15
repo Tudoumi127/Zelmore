@@ -5,10 +5,6 @@ class Load extends Phaser.Scene {
 
     preload(){
         this.load.path = './assets/'
-        /*this.load.spritesheet('player', 'hero-sheet.png', {
-            frameWidth: 32,
-            frameHeight: 32,
-        })*/
 
         //audio
         this.load.audio('jump', 'jump.mp3');

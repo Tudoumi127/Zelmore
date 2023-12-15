@@ -1,4 +1,6 @@
 class Player extends Phaser.Physics.Arcade.Sprite{
+
+    //prefab for player
     constructor(scene, x, y, texture, frame, direction){
         super(scene, x, y, texture, frame);
 
@@ -102,8 +104,6 @@ class MoveState extends State {
 
 class JumpState extends State {
     enter(scene, player) {
-        //console.log(player.playerVelocity);
-        //player.setVelocityY(player.playerVelocity)
         player.anims.play(`jump-${player.direction}`)
         scene.sound.play('jump')
 
@@ -137,19 +137,12 @@ class JumpState extends State {
         }
         player.setVelocityX(player.playerVelocity * moveDirection.x)
 
-        /*if((left.isDown || right.isDown)){
-            this.stateMachine.transition('move');
-            return;
-        }*/
-
     }
 }
 
 class FallState extends State {
     enter(scene, player) {
         player.setVelocityY(player.playerFallVelocity)
-        //player.attacking = true;
-        //player.anims.play(`swing-${player.direction}`)
         player.anims.play('fall');
         player.once('animationcomplete', () => {
             this.stateMachine.transition('idle')
@@ -163,8 +156,6 @@ class FallState extends State {
             return
         }
 
-
-        //let colliding = player.body.touching
         if(player.body.touching.down){
             this.stateMachine.transition('idle');
             return;
@@ -186,7 +177,6 @@ class AttackState extends State {
     enter(scene, player) {
         player.setVelocity(0)
         player.attacking = true;
-        //player.anims.play(`swing-${player.direction}`)
         player.anims.play('jump-right');
         player.once('animationcomplete', () => {
             this.stateMachine.transition('idle')
