@@ -10,6 +10,7 @@ class Play extends Phaser.Scene{
         //tilemap
         this.load.image('tiles', 'scuffmap.png');
         this.load.tilemapTiledJSON('tilemap', 'scuffmap.json');
+        this.load.image('car', 'car.png')
     }
 
     create(){
@@ -34,12 +35,26 @@ class Play extends Phaser.Scene{
             fixedWidth: 0
         }
 
+        let getEm = this.add.bitmapText(this.width/2, this.height/2 - borderPadding/2, 'fonty', 'Collect All The Gumballs!', 74, 1).setOrigin(0.5,0.5).setAlpha(1);
+        getEm.setDepth(12);
+        this.tweens.add({
+            targets: getEm,
+            duration: 500,
+            ease: 'Linear',
+            repeat: 0,
+            yoyo: false,
+            delay: 400,
+            alpha: { from: 1, to: 0},
+        });
+
         //placeholder bg color
         this.cameras.main.setBackgroundColor('#87CEEB')
 
         //tilemap
         const map = this.make.tilemap({key: 'tilemap'});
         const tileset = map.addTilesetImage('zelmore', 'tiles');
+        const skyLayer = map.createLayer('Sky', tileset);
+        const cloudLayer = map.createLayer('Clouds', tileset);
         const mountainLayer1 = map.createLayer('Mountains', tileset);
         const mountainLayer2 = map.createLayer('MoreMountains', tileset);
         const spikeLayer = map.createLayer('Spikes', tileset);
@@ -50,20 +65,32 @@ class Play extends Phaser.Scene{
         //add player
         const playerSpawn = map.findObject('Spawns', obj => obj.name === 'PlayerSpawn');
         this.player = new Player(this, playerSpawn.x, playerSpawn.y, 'player', 0, 'right');
-        this.player.body.setSize(40,48).setOffset(2, 0);
+        this.player.body.setSize(40,).setOffset(2, 0);
 
         //add gumballs
         const gumSpawn1 = map.findObject('Spawns', obj => obj.name === 'GumSpawn1');
-        const testGum1 = new Gumball(this, gumSpawn1.x, gumSpawn1.y, 'player', 0);
+        const testGum1 = new Gumball(this, gumSpawn1.x, gumSpawn1.y, 'gummies', 0);
         const gumSpawn2 = map.findObject('Spawns', obj => obj.name === 'GumSpawn2');
-        const testGum2 = new Gumball(this, gumSpawn2.x, gumSpawn2.y, 'player', 0);
+        const testGum2 = new Gumball(this, gumSpawn2.x, gumSpawn2.y, 'gummies', 0);
         const gumSpawn3 = map.findObject('Spawns', obj => obj.name === 'GumSpawn3');
-        const testGum3 = new Gumball(this, gumSpawn3.x, gumSpawn3.y, 'player', 0);
+        const testGum3 = new Gumball(this, gumSpawn3.x, gumSpawn3.y, 'gummies', 0);
         const gumSpawn4 = map.findObject('Spawns', obj => obj.name === 'GumSpawn4');
-        const testGum4 = new Gumball(this, gumSpawn4.x, gumSpawn4.y, 'player', 0);
+        const testGum4 = new Gumball(this, gumSpawn4.x, gumSpawn4.y, 'gummies', 0);
+        const gumSpawn5 = map.findObject('Spawns', obj => obj.name === 'GumSpawn5');
+        const testGum6 = new Gumball(this, gumSpawn5.x, gumSpawn5.y, 'gummies', 0);
+        const gumSpawn6 = map.findObject('Spawns', obj => obj.name === 'GumSpawn6');
+        const testGum7 = new Gumball(this, gumSpawn6.x, gumSpawn6.y, 'gummies', 0);
 
         const testGumSpawn = map.findObject('MessingAround', obj => obj.name === 'TestGum');
-        const testGum5 = new Gumball(this, testGumSpawn.x, testGumSpawn.y, 'player', 0);
+        const testGum5 = new Gumball(this, testGumSpawn.x, testGumSpawn.y, 'gummies', 0);
+
+        testGum1.anims.play('gumjump');
+        testGum2.anims.play('gumjump');
+        testGum3.anims.play('gumjump');
+        testGum4.anims.play('gumjump');
+        testGum5.anims.play('gumjump');
+        testGum6.anims.play('gumjump');
+        testGum7.anims.play('gumjump');
 
         //gumball colliders
         this.gumballs = this.physics.add.group(config = {
@@ -125,15 +152,39 @@ class Play extends Phaser.Scene{
             loop: true
         })
 
+        //messing around with enemies
+        let graphics = this.add.graphics()
+        graphics.lineStyle(2, 0xFFFFF, 0.75)
+        this.enemyPath = this.add.path(900, 334)
+        this.enemyPath.lineTo(1200, 334)
+        this.enemyPath.lineTo(900, 334)
+        this.enemyPath.draw(graphics)
+        let e = this.enemyPath.getStartPoint()
+
+        this.enemy = this.add.follower(this.enemyPath, e.x, e.y, 'car').setScale(0.5)
+        this.enemy.startFollow({
+            from: 0,
+            to: 1,
+            delay: 0,
+            duration: 10000,
+            ease: 'Power0',
+            hold: 0,
+            repeat: -1,
+            yoyo: false,
+            rotateToPath: false
+        })
+
 
     }
 
     update(){
         this.FSM.step();
 
-        
-        if(this.player.body.onFloor()){
-            this.player.touchedBounds = true;
+        if(this.player.attacking){
+            //play audio
+            //play visual effect animation
+            const attack = new Attack(this, this.player.x, this.player.y, 'gummies', 0, this.player, this.player.direction, this.enemy);
+            this.player.attacking = false;
         }
 
         if(this.gameOver == true){

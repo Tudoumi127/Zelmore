@@ -2,18 +2,22 @@ class Player extends Phaser.Physics.Arcade.Sprite{
     constructor(scene, x, y, texture, frame, direction){
         super(scene, x, y, texture, frame);
 
+        //physics
         scene.add.existing(this);
         scene.physics.add.existing(this, false);
-
         this.body.setSize(this.width / 2, this.height / 2)
         this.body.setCollideWorldBounds(true);
-        this.body.setGravityY(300);
+        this.body.setGravityY(400);
 
+        //variables
         this.direction = direction;
         this.playerVelocity = 300;
+        this.playerJumpVelocity = 500;
         this.touchedBounds = false;
+        this.attacking = false;
+        this.hurt = false;
 
-
+        //statemachine
         scene.FSM = new StateMachine('idle', {
             idle: new IdleState(),
             move: new MoveState(),
@@ -74,7 +78,6 @@ class MoveState extends State {
 
         // transition to idle if not pressing movement keys
         if(!(left.isDown || right.isDown)) {
-            console.log("i wanna move")
             this.stateMachine.transition('idle')
             return
         }
@@ -97,30 +100,32 @@ class MoveState extends State {
 
 class JumpState extends State {
     enter(scene, player) {
-        console.log("entered jump")
         //console.log(player.playerVelocity);
         //player.setVelocityY(player.playerVelocity)
-        //player.anims.play(`jump-${player.direction}`)
-        /*player.once('animationcomplete', () => {
+        player.anims.play(`jump-${player.direction}`)
+        scene.onFloor = false
+        player.once('animationcomplete', () => {
             this.stateMachine.transition('idle')
-        })*/
+        })
     }
     execute(scene, player){
-        console.log("jump state execute")
         const { left, right, space, shift} = scene.keys
-        player.setVelocityY(player.playerVelocity)
-        if(scene.hurt) {
+        player.setVelocityY(-(player.playerJumpVelocity))
+
+        if(player.hurt) {
             this.stateMachine.transition('hurt')
             return
         }
 
         let colliding = player.body.touching
-        if(colliding.down){
+        if(colliding.down || scene.onFloor){
             this.stateMachine.transition('idle');
+            return;
         }
 
         if((left.isDown || right.isDown)){
             this.stateMachine.transition('move');
+            return;
         }
 
     }
@@ -129,10 +134,19 @@ class JumpState extends State {
 class AttackState extends State {
     enter(scene, player) {
         player.setVelocity(0)
+        player.attacking = true;
         //player.anims.play(`swing-${player.direction}`)
+        player.anims.play('jump-right');
         player.once('animationcomplete', () => {
             this.stateMachine.transition('idle')
         })
+    }
+
+    execute(scene, player){
+        if(player.hurt){
+            this.stateMachine.transition('hurt')
+            return
+        }
     }
 }
 
@@ -141,7 +155,8 @@ class HurtState extends State {
     enter(scene, player) {
         player.setVelocity(0)
         //player.anims.play(`walk-${player.direction}`)
-        player.anims.stop()
+        //player.anims.stop()
+        player.attacking = false;
         player.setTint(0xFF0000)     // turn red
         // create knockback by sending body in direction opposite facing direction
         switch(player.direction) {

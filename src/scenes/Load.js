@@ -15,10 +15,17 @@ class Load extends Phaser.Scene {
             frameHeight: 48,
         })
 
-        //tilemap
+        this.load.spritesheet('gummies', 'Gummyballs.png', {
+            frameWidth: 32,
+            frameHeight: 32,
+        })
+
+        //font
+        this.load.bitmapFont('fonty', 'gem.png', 'gem.xml')
     }
 
     create(){
+        //player anims
         this.anims.create({
             key: 'idle-right',
             frameRate: 8,
@@ -47,13 +54,12 @@ class Load extends Phaser.Scene {
                 frames: [7, 8, 6, 9]
             }),
         })
-        //use this as placeholder for jump
         this.anims.create({
             key: 'jump-right',
             frameRate: 8,
             repeat: 0,
             frames: this.anims.generateFrameNumbers('player', { 
-                frames: [1, 2, 2, 2]
+                frames: [1, 2]
              }),
         })
         this.anims.create({
@@ -61,7 +67,7 @@ class Load extends Phaser.Scene {
             frameRate: 8,
             repeat: 0,
             frames: this.anims.generateFrameNumbers('player', { 
-                frames: [6, 8, 8, 8]
+                frames: [6, 8]
              }),
         })
         this.anims.create({
@@ -70,6 +76,16 @@ class Load extends Phaser.Scene {
             repeat: 0,
             frames: this.anims.generateFrameNumbers('player', { 
                 frames: [4, 4, 4]
+             }),
+        })
+
+        //gumball anims
+        this.anims.create({
+            key: 'gumjump',
+            frameRate: 8,
+            repeat: -1,
+            frames: this.anims.generateFrameNumbers('gummies', { 
+                start: 0, end: 2
              }),
         })
 
