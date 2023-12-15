@@ -29,7 +29,7 @@ class Load extends Phaser.Scene {
             key: 'idle-left',
             frameRate: 8,
             repeat: -1,
-            frames: this.anims.generateFrameNumbers('player', { start: 0, end: 1 }),
+            frames: this.anims.generateFrameNumbers('player', { start: 7, end: 6 }),
         })
         this.anims.create({
             key: 'walk-right',
@@ -44,7 +44,7 @@ class Load extends Phaser.Scene {
             frameRate: 8,
             repeat: -1,
             frames: this.anims.generateFrameNumbers('player', { 
-                frames: [0, 2, 3, 2] //just testing
+                frames: [7, 8, 6, 9]
             }),
         })
         //use this as placeholder for jump
@@ -61,7 +61,7 @@ class Load extends Phaser.Scene {
             frameRate: 8,
             repeat: 0,
             frames: this.anims.generateFrameNumbers('player', { 
-                frames: [1, 2, 2, 2]
+                frames: [6, 8, 8, 8]
              }),
         })
         this.anims.create({

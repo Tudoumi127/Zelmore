@@ -50,6 +50,7 @@ class Play extends Phaser.Scene{
         //add player
         const playerSpawn = map.findObject('Spawns', obj => obj.name === 'PlayerSpawn');
         this.player = new Player(this, playerSpawn.x, playerSpawn.y, 'player', 0, 'right');
+        this.player.body.setSize(40,48).setOffset(2, 0);
 
         //add gumballs
         const gumSpawn1 = map.findObject('Spawns', obj => obj.name === 'GumSpawn1');
@@ -64,7 +65,7 @@ class Play extends Phaser.Scene{
         const testGumSpawn = map.findObject('MessingAround', obj => obj.name === 'TestGum');
         const testGum5 = new Gumball(this, testGumSpawn.x, testGumSpawn.y, 'player', 0);
 
-
+        //gumball colliders
         this.gumballs = this.physics.add.group(config = {
             immovable: true,
         })
@@ -107,12 +108,11 @@ class Play extends Phaser.Scene{
             console.log(this.gameOver);
         });
 
-
+        //keys
         this.keys = this.input.keyboard.createCursorKeys();
         this.keys.keySPACE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
         this.keys.keyRIGHT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT);
         this.keys.keyLEFT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT);
-        //this.keys.HKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.H);
 
         //display score
         this.scoreShow = this.add.text(borderUISize + borderPadding, borderUISize + borderPadding * 2, this.score, scoreConfig);

@@ -7,10 +7,10 @@ class Player extends Phaser.Physics.Arcade.Sprite{
 
         this.body.setSize(this.width / 2, this.height / 2)
         this.body.setCollideWorldBounds(true);
-        this.body.setGravityY(200);
+        this.body.setGravityY(300);
 
         this.direction = direction;
-        this.playerVelocity = 500;
+        this.playerVelocity = 300;
         this.touchedBounds = false;
 
 
@@ -22,27 +22,17 @@ class Player extends Phaser.Physics.Arcade.Sprite{
             hurt: new HurtState(),
         }, [scene, this])
     }
-
-    /*update(){
-        if(this.body.onFloor()){
-            this.touchedBounds = true;
-            console.log(this.touchedBounds);
-        }
-        console.log(this.body.onFloor());
-    }*/
 }
 
 class IdleState extends State {
     enter(scene, player) {
         player.setVelocity(0);
         player.anims.play(`idle-${player.direction}`)
-        //player.anims.stop()
     }
 
     execute(scene, player) {
         // use destructuring to make a local copy of the keyboard object
         const { left, right, space, shift } = scene.keys
-        //const HKey = scene.keys.HKey
 
         // transition to jump if pressing space
         if(Phaser.Input.Keyboard.JustDown(space)) {
@@ -55,12 +45,6 @@ class IdleState extends State {
             this.stateMachine.transition('attack')
             return
         }
-
-        // hurt if H key input (just for demo purposes)
-        /*if(Phaser.Input.Keyboard.JustDown(HKey)) {
-            this.stateMachine.transition('hurt')
-            return
-        }*/
 
         // transition to move if pressing a movement key
         if(left.isDown || right.isDown) {
@@ -76,7 +60,7 @@ class MoveState extends State {
         const { left, right, space, shift} = scene.keys
         const HKey = scene.keys.HKey
 
-        // transition to swing if pressing space
+        // transition to jump if pressing space
         if(Phaser.Input.Keyboard.JustDown(space)) {
             this.stateMachine.transition('jump')
             return
@@ -87,12 +71,6 @@ class MoveState extends State {
             this.stateMachine.transition('attack')
             return
         }
-
-        // hurt if H key input (just for demo purposes)
-        /*if(Phaser.Input.Keyboard.JustDown(HKey)) {
-            this.stateMachine.transition('hurt')
-            return
-        }*/
 
         // transition to idle if not pressing movement keys
         if(!(left.isDown || right.isDown)) {
@@ -119,8 +97,9 @@ class MoveState extends State {
 
 class JumpState extends State {
     enter(scene, player) {
+        console.log("entered jump")
         //console.log(player.playerVelocity);
-        player.setVelocityY(player.playerVelocity)
+        //player.setVelocityY(player.playerVelocity)
         //player.anims.play(`jump-${player.direction}`)
         /*player.once('animationcomplete', () => {
             this.stateMachine.transition('idle')
@@ -128,7 +107,8 @@ class JumpState extends State {
     }
     execute(scene, player){
         console.log("jump state execute")
-
+        const { left, right, space, shift} = scene.keys
+        player.setVelocityY(player.playerVelocity)
         if(scene.hurt) {
             this.stateMachine.transition('hurt')
             return
@@ -137,6 +117,10 @@ class JumpState extends State {
         let colliding = player.body.touching
         if(colliding.down){
             this.stateMachine.transition('idle');
+        }
+
+        if((left.isDown || right.isDown)){
+            this.stateMachine.transition('move');
         }
 
     }
