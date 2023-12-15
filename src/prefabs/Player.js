@@ -13,6 +13,7 @@ class Player extends Phaser.Physics.Arcade.Sprite{
         this.direction = direction;
         this.playerVelocity = 300;
         this.playerJumpVelocity = 500;
+        this.playerFallVelocity = 200;
         this.touchedBounds = false;
         this.attacking = false;
         this.hurt = false;
@@ -22,6 +23,7 @@ class Player extends Phaser.Physics.Arcade.Sprite{
             idle: new IdleState(),
             move: new MoveState(),
             jump: new JumpState(),
+            fall: new FallState(),
             attack: new AttackState(),
             hurt: new HurtState(),
         }, [scene, this])
@@ -105,7 +107,7 @@ class JumpState extends State {
         player.anims.play(`jump-${player.direction}`)
         scene.onFloor = false
         player.once('animationcomplete', () => {
-            this.stateMachine.transition('idle')
+            this.stateMachine.transition('fall')
         })
     }
     execute(scene, player){
@@ -123,11 +125,62 @@ class JumpState extends State {
             return;
         }
 
-        if((left.isDown || right.isDown)){
+        let moveDirection = new Phaser.Math.Vector2(0, 0)
+        if(left.isDown) {
+            moveDirection.x = -1
+            player.direction = 'left'
+        } else if(right.isDown) {
+            moveDirection.x = 1
+            player.direction = 'right'
+        }
+        player.setVelocityX(player.playerVelocity * moveDirection.x)
+
+        /*if((left.isDown || right.isDown)){
             this.stateMachine.transition('move');
+            return;
+        }*/
+
+    }
+}
+
+class FallState extends State {
+    enter(scene, player) {
+        player.setVelocityY(player.playerFallVelocity)
+        //player.attacking = true;
+        //player.anims.play(`swing-${player.direction}`)
+        player.anims.play('fall');
+        player.once('animationcomplete', () => {
+            this.stateMachine.transition('idle')
+        })
+    }
+
+    execute(scene, player){
+        const { left, right } = scene.keys
+        if(player.hurt){
+            this.stateMachine.transition('fall')
+            return
+        }
+
+        //let colliding = player.body.touching
+        if(player.body.touching.down){
+            this.stateMachine.transition('idle');
             return;
         }
 
+        let moveDirection = new Phaser.Math.Vector2(0, 0)
+        if(left.isDown) {
+            moveDirection.x = -1
+            player.direction = 'left'
+        } else if(right.isDown) {
+            moveDirection.x = 1
+            player.direction = 'right'
+        }
+        player.setVelocityX(player.playerVelocity * moveDirection.x)
+
+        /*if((left.isDown || right.isDown)){
+            //this.stateMachine.transition('move');
+            return;
+        }*/
     }
 }
 

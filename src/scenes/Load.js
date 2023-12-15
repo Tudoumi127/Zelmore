@@ -59,7 +59,7 @@ class Load extends Phaser.Scene {
             frameRate: 8,
             repeat: 0,
             frames: this.anims.generateFrameNumbers('player', { 
-                frames: [1, 2]
+                frames: [1, 2, 2]
              }),
         })
         this.anims.create({
@@ -67,12 +67,20 @@ class Load extends Phaser.Scene {
             frameRate: 8,
             repeat: 0,
             frames: this.anims.generateFrameNumbers('player', { 
-                frames: [6, 8]
+                frames: [6, 8, 8]
              }),
         })
         this.anims.create({
             key: 'hurt',
             frameRate: 8,
+            repeat: 0,
+            frames: this.anims.generateFrameNumbers('player', { 
+                frames: [4, 4, 4]
+             }),
+        })
+        this.anims.create({
+            key: 'fall',
+            frameRate: 4,
             repeat: 0,
             frames: this.anims.generateFrameNumbers('player', { 
                 frames: [4, 4, 4]

@@ -115,7 +115,10 @@ class Play extends Phaser.Scene{
         //camera
         this.cameras.main.setBounds(0, 0, map.widthInPixels, map.heightInPixels)
         this.cameras.main.startFollow(this.player, true, 0.25, 0.25)
-        //this.UICamera = this.cameras.add(0, 0, game.config.width, game.config.height).setZoom(1);
+        this.cameras.main.setName("PlayerCam");
+        this.UICamera = this.cameras.add(0, 0, game.config.width, game.config.height).setZoom(1);
+        this.UICamera.setBounds(0, 0, game.config.width, game.config.height)
+        this.UICamera.setName("UICam");
         //this.UICamera.ignore([this.player])
         this.physics.world.setBounds(0, 0, map.widthInPixels, map.heightInPixels)
 
@@ -136,7 +139,7 @@ class Play extends Phaser.Scene{
                 this.gameOver = true;
             })
             //this.gameOver = true;
-            console.log(this.gameOver);
+            //console.log(this.gameOver);
         });
 
         //keys
@@ -157,8 +160,9 @@ class Play extends Phaser.Scene{
         })
 
         //messing around with enemies
-        let graphics = this.add.graphics()
+        /*let graphics = this.add.graphics()
         graphics.lineStyle(2, 0xFFFFF, 0.75)
+
         this.enemyPath = this.add.path(900, 334)
         this.enemyPath.lineTo(1200, 334)
         this.enemyPath.lineTo(900, 334)
@@ -176,7 +180,7 @@ class Play extends Phaser.Scene{
             repeat: -1,
             yoyo: false,
             rotateToPath: false
-        })
+        })*/
 
 
     }
