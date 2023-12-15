@@ -105,6 +105,8 @@ class JumpState extends State {
         //console.log(player.playerVelocity);
         //player.setVelocityY(player.playerVelocity)
         player.anims.play(`jump-${player.direction}`)
+        scene.sound.play('jump')
+
         scene.onFloor = false
         player.once('animationcomplete', () => {
             this.stateMachine.transition('fall')
@@ -161,6 +163,7 @@ class FallState extends State {
             return
         }
 
+
         //let colliding = player.body.touching
         if(player.body.touching.down){
             this.stateMachine.transition('idle');
@@ -176,11 +179,6 @@ class FallState extends State {
             player.direction = 'right'
         }
         player.setVelocityX(player.playerVelocity * moveDirection.x)
-
-        /*if((left.isDown || right.isDown)){
-            //this.stateMachine.transition('move');
-            return;
-        }*/
     }
 }
 
@@ -207,24 +205,7 @@ class AttackState extends State {
 class HurtState extends State {
     enter(scene, player) {
         player.setVelocity(0)
-        //player.anims.play(`walk-${player.direction}`)
-        //player.anims.stop()
+        player.anims.stop()
         player.attacking = false;
-        player.setTint(0xFF0000)     // turn red
-        // create knockback by sending body in direction opposite facing direction
-        switch(player.direction) {
-            case 'left':
-                player.setVelocityX(player.playerVelocity*2)
-                break
-            case 'right':
-                player.setVelocityX(-player.playerVelocity*2)
-                break
-        }
-
-        // set recovery timer
-        scene.time.delayedCall(player.hurtTimer, () => {
-            player.clearTint()
-            this.stateMachine.transition('idle')
-        })
     }
 }

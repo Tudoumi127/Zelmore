@@ -10,6 +10,11 @@ class Load extends Phaser.Scene {
             frameHeight: 32,
         })*/
 
+        //audio
+        this.load.audio('jump', 'jump.mp3');
+        this.load.audio('pickup', 'pickup.mp3')
+        this.load.audio('spiked', 'spiked.mp3');
+
         this.load.spritesheet('player', 'GumPlayer.png', {
             frameWidth: 48,
             frameHeight: 48,
@@ -72,10 +77,10 @@ class Load extends Phaser.Scene {
         })
         this.anims.create({
             key: 'hurt',
-            frameRate: 8,
+            frameRate: 60,
             repeat: 0,
             frames: this.anims.generateFrameNumbers('player', { 
-                frames: [4, 4, 4]
+                frames: [4]
              }),
         })
         this.anims.create({
@@ -83,7 +88,7 @@ class Load extends Phaser.Scene {
             frameRate: 4,
             repeat: 0,
             frames: this.anims.generateFrameNumbers('player', { 
-                frames: [4, 4, 4]
+                frames: [5, 5]
              }),
         })
 

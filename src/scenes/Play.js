@@ -35,7 +35,7 @@ class Play extends Phaser.Scene{
             fixedWidth: 0
         }
 
-        let getEm = this.add.bitmapText(this.width/2, this.height/2 - borderPadding/2, 'fonty', 'Collect All The Gumballs!', 74, 1).setOrigin(0.5,0.5).setAlpha(1);
+        let getEm = this.add.bitmapText(this.width/2, this.height/2 - borderPadding/2, 'fonty', 'Collect All The Gumballs!', 55, 1).setOrigin(-0.1,-7).setAlpha(1);
         getEm.setDepth(12);
         this.tweens.add({
             targets: getEm,
@@ -47,8 +47,6 @@ class Play extends Phaser.Scene{
             alpha: { from: 1, to: 0},
         });
 
-        //placeholder bg color
-        this.cameras.main.setBackgroundColor('#87CEEB')
 
         //tilemap
         const map = this.make.tilemap({key: 'tilemap'});
@@ -105,10 +103,7 @@ class Play extends Phaser.Scene{
         this.gumballs.add(testGum7);
         this.physics.add.collider(this.player, this.gumballs, (player, gumball) => {
             this.score += 1
-            console.log(this.score);
-            //increment score
-            //bubble.anims.play('bubblePop');
-            //bubble.bubIsFather = true
+            this.sound.play('pickup')
             gumball.destroy();
         })
 
@@ -116,10 +111,12 @@ class Play extends Phaser.Scene{
         this.cameras.main.setBounds(0, 0, map.widthInPixels, map.heightInPixels)
         this.cameras.main.startFollow(this.player, true, 0.25, 0.25)
         this.cameras.main.setName("PlayerCam");
-        this.UICamera = this.cameras.add(0, 0, game.config.width, game.config.height).setZoom(1);
-        this.UICamera.setBounds(0, 0, game.config.width, game.config.height)
+
+        this.UICamera = this.cameras.add(0, 0, this.scale.width, this.scale.height).setScroll(0, 0);
+        this.UICamera.setZoom(1);
+        this.UICamera.ignore([this.player, this.gumballs, skyLayer, cloudLayer, mountainLayer1, mountainLayer2, spikeLayer, groundLayer]);
         this.UICamera.setName("UICam");
-        //this.UICamera.ignore([this.player])
+
         this.physics.world.setBounds(0, 0, map.widthInPixels, map.heightInPixels)
 
         //tilemap colliders
@@ -135,9 +132,12 @@ class Play extends Phaser.Scene{
 
         this.physics.add.collider(this.player, spikeLayer, () =>{
             this.player.anims.play('hurt', true)
+            this.sound.play('spiked')
+            //this.gameOver = true;
             this.player.once('animationcomplete', () => {
                 this.gameOver = true;
             })
+            this.sound.play('spiked')
             //this.gameOver = true;
             //console.log(this.gameOver);
         });
@@ -188,12 +188,12 @@ class Play extends Phaser.Scene{
     update(){
         this.FSM.step();
 
-        if(this.player.attacking){
+        /*if(this.player.attacking){
             //play audio
             //play visual effect animation
             const attack = new Attack(this, this.player.x, this.player.y, 'gummies', 0, this.player, this.player.direction, this.enemy);
             this.player.attacking = false;
-        }
+        }*/
 
         if(this.score >= 7){
             this.scene.start('youWinScene');

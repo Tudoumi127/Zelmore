@@ -1,5 +1,5 @@
 let config = {
-    type: Phaser.CANVAS,
+    //type: Phaser.CANVAS,
     type: Phaser.WEBGL, //tinting
     width: 800,
     height: 480,
@@ -9,10 +9,7 @@ let config = {
     physics: {
         default: 'arcade',
         arcade:{
-            debug: true, 
-            /*gravity: {
-                y: 200
-            }*/
+            debug: false, 
         }
     },
     scene: [ Load, Play, GameOver, YouWin]
@@ -22,6 +19,7 @@ let game = new Phaser.Game(config);
 
 let { height, width } = game.config
 let playerDirection
+
 //reserve keyboard vars
 let keyR;
 let keyLEFT;
