@@ -1,3 +1,11 @@
+/*
+Name: Lily Chen
+Class CMPM 120
+Professor: Nathan Altice
+
+So I'll be the first to admit I should have spent more time on this assignment, it has not been a
+kind couple weeks to me*/
+
 let config = {
     //type: Phaser.CANVAS,
     type: Phaser.WEBGL, //tinting
@@ -12,7 +20,7 @@ let config = {
             debug: false, 
         }
     },
-    scene: [ Load, Play, GameOver, YouWin]
+    scene: [ Load, Menu, Play, GameOver, YouWin]
 }
 
 let game = new Phaser.Game(config);

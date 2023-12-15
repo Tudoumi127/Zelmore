@@ -14,12 +14,20 @@ class Load extends Phaser.Scene {
         this.load.audio('jump', 'jump.mp3');
         this.load.audio('pickup', 'pickup.mp3')
         this.load.audio('spiked', 'spiked.mp3');
+        this.load.audio('loopmusic', 'loopmusic.mp3')
 
+        //images
+        this.load.image('menuZelmore', 'ZelmoreMenu.png');
+        this.load.image('deadZelmore', 'ZelmoreDied.png');
+        this.load.image('winZelmore', 'ZelmoreWin.png');
+
+        //player
         this.load.spritesheet('player', 'GumPlayer.png', {
             frameWidth: 48,
             frameHeight: 48,
         })
 
+        //gumballs
         this.load.spritesheet('gummies', 'Gummyballs.png', {
             frameWidth: 32,
             frameHeight: 32,
@@ -103,6 +111,6 @@ class Load extends Phaser.Scene {
         })
 
         // proceed once loading completes
-        this.scene.start('playScene')
+        this.scene.start('menuScene')
     }
 }
