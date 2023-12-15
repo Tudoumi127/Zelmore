@@ -101,6 +101,8 @@ class Play extends Phaser.Scene{
         this.gumballs.add(testGum3);
         this.gumballs.add(testGum4);
         this.gumballs.add(testGum5);
+        this.gumballs.add(testGum6);
+        this.gumballs.add(testGum7);
         this.physics.add.collider(this.player, this.gumballs, (player, gumball) => {
             this.score += 1
             console.log(this.score);
@@ -113,6 +115,8 @@ class Play extends Phaser.Scene{
         //camera
         this.cameras.main.setBounds(0, 0, map.widthInPixels, map.heightInPixels)
         this.cameras.main.startFollow(this.player, true, 0.25, 0.25)
+        //this.UICamera = this.cameras.add(0, 0, game.config.width, game.config.height).setZoom(1);
+        //this.UICamera.ignore([this.player])
         this.physics.world.setBounds(0, 0, map.widthInPixels, map.heightInPixels)
 
         //tilemap colliders
@@ -187,6 +191,9 @@ class Play extends Phaser.Scene{
             this.player.attacking = false;
         }
 
+        if(this.score >= 7){
+            this.scene.start('youWinScene');
+        }
         if(this.gameOver == true){
             //this.score = 0;
             this.scene.start('gameOverScene');
