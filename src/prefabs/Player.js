@@ -35,14 +35,14 @@ class Player extends Phaser.Physics.Arcade.Sprite{
 class IdleState extends State {
     enter(scene, player) {
         player.setVelocity(0);
-        //player.anims.play(`idle-${player.direction}`)
-        player.anims.stop()
+        player.anims.play(`idle-${player.direction}`)
+        //player.anims.stop()
     }
 
     execute(scene, player) {
         // use destructuring to make a local copy of the keyboard object
         const { left, right, space, shift } = scene.keys
-        const HKey = scene.keys.HKey
+        //const HKey = scene.keys.HKey
 
         // transition to jump if pressing space
         if(Phaser.Input.Keyboard.JustDown(space)) {
@@ -113,7 +113,7 @@ class MoveState extends State {
         // normalize movement vector, update player position, and play proper animation
         moveDirection.normalize()
         player.setVelocityX(player.playerVelocity * moveDirection.x)
-        //player.anims.play(`walk-${player.direction}`, true)
+        player.anims.play(`walk-${player.direction}`, true)
     }
 }
 

@@ -15,7 +15,7 @@ let config = {
             }*/
         }
     },
-    scene: [ Load, Play]
+    scene: [ Load, Play, GameOver]
 }
 
 let game = new Phaser.Game(config);
@@ -23,6 +23,7 @@ let game = new Phaser.Game(config);
 let { height, width } = game.config
 let playerDirection
 //reserve keyboard vars
+let keyR;
 let keyLEFT;
 let keyRIGHT;
 let keySHIFT;

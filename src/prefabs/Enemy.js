@@ -15,7 +15,7 @@ class Enemy extends Phaser.Physics.Arcade.Sprite{
 
 
         scene.FSM = new StateMachine('idle', {
-            idle: new IdleState(),
+            idle: new EnemyIdleState(),
             left: new LeftState(),
             right: new RightState(),
         }, [scene, this])
@@ -23,7 +23,7 @@ class Enemy extends Phaser.Physics.Arcade.Sprite{
 
 }
 
-class IdleState extends State {
+class EnemyIdleState extends State {
     enter(scene, enemy) {
         player.setVelocity(0);
         //player.anims.play(`idle-${player.direction}`)

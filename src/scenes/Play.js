@@ -99,7 +99,11 @@ class Play extends Phaser.Scene{
         })
 
         this.physics.add.collider(this.player, spikeLayer, () =>{
-            this.gameOver = true;
+            this.player.anims.play('hurt', true)
+            this.player.once('animationcomplete', () => {
+                this.gameOver = true;
+            })
+            //this.gameOver = true;
             console.log(this.gameOver);
         });
 
@@ -130,6 +134,11 @@ class Play extends Phaser.Scene{
         
         if(this.player.body.onFloor()){
             this.player.touchedBounds = true;
+        }
+
+        if(this.gameOver == true){
+            //this.score = 0;
+            this.scene.start('gameOverScene');
         }
         
         
