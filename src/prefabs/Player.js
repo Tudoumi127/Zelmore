@@ -119,7 +119,7 @@ class MoveState extends State {
 
 class JumpState extends State {
     enter(scene, player) {
-        console.log(player.playerVelocity);
+        //console.log(player.playerVelocity);
         player.setVelocityY(player.playerVelocity)
         //player.anims.play(`jump-${player.direction}`)
         /*player.once('animationcomplete', () => {
@@ -128,7 +128,6 @@ class JumpState extends State {
     }
     execute(scene, player){
         console.log("jump state execute")
-        const {space} = scene.keys;
 
         if(scene.hurt) {
             this.stateMachine.transition('hurt')
